@@ -1,0 +1,11 @@
+﻿-- Удалить схему public
+DROP SCHEMA IF EXISTS "public" CASCADE;
+
+-- Создать схему public
+CREATE SCHEMA IF NOT EXISTS "public" AUTHORIZATION "StoreDBAdmin";
+
+-- Дать авто права на базу данных для StoreDBUser
+SET ROLE "StoreDBAdmin";
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO "StoreDBUser";
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO "StoreDBUser";
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT EXECUTE ON FUNCTIONS TO "StoreDBUser";
