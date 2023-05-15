@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Store.DataContext.Entities;
+using System.Threading.Tasks;
 
 namespace Store.WebAPI.Controllers
 {
@@ -8,8 +10,16 @@ namespace Store.WebAPI.Controllers
     [Route("api/products")]
     public class ProductsController : ControllerBase
     {
+        private readonly IStoreDbContext _ctx;
+
+        public ProductsController(IStoreDbContext ctx)
+        {
+            _ctx = ctx;
+        }
+
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody] Product product)
+        public async Task<IActionResult> Update(Guid id, [FromBody] Product product)
         {
             // Проверяем, что переданный идентификатор совпадает с идентификатором товара в теле запроса
             if (id != product.Id)
@@ -17,15 +27,46 @@ namespace Store.WebAPI.Controllers
                 return BadRequest();
             }
 
-            // Обновляем информацию о товаре в базе данных
-            // ...
+            // Получаем товар из базы данных
+            var existingProduct = await _ctx.Products.FindAsync(id);
+
+            // Если товар не найден, возвращаем ошибку 404
+            if (existingProduct == null)
+            {
+                return NotFound();
+            }
+
+            // Обновляем свойства товара
+            existingProduct.Name = product.Name;
+            existingProduct.Description = product.Description;
+            existingProduct.Price = product.Price;
+            existingProduct.Count = product.Count;
+
+            // Сохраняем изменения в базе данных
+            await _ctx.SaveChangesAsync();
 
             return NoContent();
         }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] Product product)
+        {
+
+            // Обновляем свойства товара
+            _ctx.Products.Add(product);
+
+            // Сохраняем изменения в базе данных
+            await _ctx.SaveChangesAsync();
+
+            return Ok(product);
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var products = _ctx.Products.ToList();
+            return Ok(products);
+        }
     }
-
-
-
-
-
 }

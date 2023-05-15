@@ -14,6 +14,7 @@ public class User
 
     /// <summary>Логин</summary>
     public string Login { get; set; }
+    public string? Hash { get; set; }
 
     ///<summary>Роль</summary>
     public int Role { get; set; }

@@ -10,7 +10,7 @@
         public string Name { get; set; }
 
         /// <summary>Описание товара</summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>Цена товара</summary>
         public decimal Price { get; set; }

@@ -1,4 +1,5 @@
 using Store.WebAPI.Configuration;
+using Store.WebAPI.Middleware;
 
 namespace Store.WebAPI
 {
@@ -10,7 +11,10 @@ namespace Store.WebAPI
 
             // Add services to the container.
             // Add application services
+            builder.Services.AddApplicationServices(builder.Configuration);
+
             builder.Services.AddDatabaseServices(builder.Configuration);
+            builder.Services.AddAuthenticationServices(builder.Configuration);
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -26,8 +30,9 @@ namespace Store.WebAPI
                 app.UseSwaggerUI();
             }
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseMiddleware<AuthorizationMiddleware>();
 
             app.MapControllers();
 

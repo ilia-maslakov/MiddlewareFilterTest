@@ -17,6 +17,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(p => p.Email).HasMaxLength(256);
         builder.Property(p => p.Login).HasMaxLength(256);
         builder.Property(p => p.Role).HasColumnType("int");
+        builder.Property(p => p.Hash).HasMaxLength(256);
 
         // Indexes
         builder.HasIndex(p => p.Login).IsUnique();

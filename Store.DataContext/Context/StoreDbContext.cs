@@ -1,15 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.DataContext.Entities;
 
-public class StoreDbContext : DbContext
+public class StoreDbContext : DbContext, IStoreDbContext
 {
-    public StoreDbContext() { }
-
-    public StoreDbContext(DbContextOptions<StoreDbContext> options) : base(options) {}
+    public StoreDbContext(DbContextOptions<StoreDbContext> options) :
+        base(options)
+    { }
 
 
     public DbSet<Product> Products { get; set; }
     public DbSet<User> Users { get; set; }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await base.SaveChangesAsync();
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -25,7 +30,4 @@ public class StoreDbContext : DbContext
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(StoreDbContext).Assembly);
     }
-
-
-
 }
