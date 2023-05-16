@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Store.DataContext.Entities;
-using Store.WebAPI.Middleware;
+using Store.WebAPI.Filters;
 using System.Threading.Tasks;
 
 namespace Store.WebAPI.Controllers

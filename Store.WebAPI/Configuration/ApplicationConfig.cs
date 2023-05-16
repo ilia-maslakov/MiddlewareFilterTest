@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Diagnostics;
-using Store.WebAPI.Middleware;
+using Store.WebAPI.Filters;
 
 namespace Store.WebAPI.Configuration
 {

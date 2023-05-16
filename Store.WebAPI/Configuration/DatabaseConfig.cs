@@ -39,7 +39,3 @@ public static class DatabaseMigrationConfig
         return appBuilder;
     }
 }
-
-
-
-

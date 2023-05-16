@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Store.WebAPI.Middleware
+namespace Store.WebAPI.Filters
 {
     // Фильтр действий для скрытия товаров с нулевым количеством и проверки наличия товара
     public class ProductActionFilter : IActionFilter
