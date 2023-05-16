@@ -22,12 +22,6 @@ namespace Store.WebAPI.Middleware
                 await _next(context);
                 return;
             }
-            if (!((ClaimsIdentity)context.User.Identity).IsAuthenticated)
-            {
-                // ≈сли пользователь не авторизован, то возвращаем ошибку 401 Unauthorized и завершаем обработку запроса.
-                context.Response.StatusCode = 401;
-                return;
-            }
 
             // ѕровер€ем, €вл€етс€ ли атрибут [Authorize(Roles = "admin")] заданным дл€ данного действи€
             var authorizeAttribute = context.GetEndpoint()?.Metadata.GetMetadata<AuthorizeAttribute>();

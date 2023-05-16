@@ -1,5 +1,7 @@
 using Store.WebAPI.Configuration;
 using Store.WebAPI.Middleware;
+using Serilog;
+using Serilog.Events;
 
 namespace Store.WebAPI
 {
@@ -7,6 +9,13 @@ namespace Store.WebAPI
     {
         public static void Main(string[] args)
         {
+
+            var logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .CreateLogger();
+
+            logger.Information("Application started");
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -39,6 +48,8 @@ namespace Store.WebAPI
             // Apply data context migrations if they exist
             app.UseMigrations(builder.Configuration, builder.Environment);
             app.Run();
+
+            logger.Information("Application ended");
         }
     }
 }

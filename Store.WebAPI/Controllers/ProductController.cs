@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Store.DataContext.Entities;
+using Store.WebAPI.Middleware;
 using System.Threading.Tasks;
 
 namespace Store.WebAPI.Controllers
@@ -8,6 +10,7 @@ namespace Store.WebAPI.Controllers
     [ApiController]
     [Route("[controller]")]
     [Route("api/products")]
+    [ServiceFilter(typeof(ProductActionFilter))]
     public class ProductsController : ControllerBase
     {
         private readonly IStoreDbContext _ctx;
@@ -63,10 +66,24 @@ namespace Store.WebAPI.Controllers
         }
 
         [HttpGet]
+        [TypeFilter(typeof(ProductGetAllActionFilter))]
         public IActionResult GetAll()
         {
             var products = _ctx.Products.ToList();
             return Ok(products);
+        }
+
+        [HttpGet("info/{id}")]
+        [TypeFilter(typeof(ProductInfoActionFilter))]
+        public IActionResult Info(Guid id)
+        {
+            // Получаем товар из базы данных
+            var product = _ctx.Products.Find(id);
+            if (product != null)
+            {
+                return Ok(product);
+            }
+            return NotFound();
         }
     }
 }

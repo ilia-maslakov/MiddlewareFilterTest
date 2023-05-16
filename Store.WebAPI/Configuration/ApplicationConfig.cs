@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Diagnostics;
+using Store.WebAPI.Middleware;
 
 namespace Store.WebAPI.Configuration
 {
@@ -11,6 +12,11 @@ namespace Store.WebAPI.Configuration
 
             // регистрация DbContext и интерфейса
             services.AddScoped<IStoreDbContext, StoreDbContext>();
+
+            // регистрация фильтров
+            services.AddScoped<ProductActionFilter>();
+            services.AddScoped<ProductGetAllActionFilter>();
+            services.AddScoped<ProductInfoActionFilter>();
 
             return services;
         }
