@@ -33,7 +33,7 @@ namespace Store.WebAPI
             services.AddControllers();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             // Добавление Serilog middleware для логирования запросов
             app.UseSerilogRequestLogging();
@@ -50,7 +50,7 @@ namespace Store.WebAPI
 
 
             // Apply data context migrations if they exist
-            app.UseMigrations(Configuration, env);
+            app.UseMigrations(Configuration);
 
             app.UseEndpoints(endpoints =>
             {

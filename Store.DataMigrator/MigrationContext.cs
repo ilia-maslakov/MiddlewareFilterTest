@@ -7,6 +7,7 @@ namespace Store.DataMigrator
     public class Migration
     {
         public int Id { get; set; }
+        #pragma warning disable CS8618
         public string Version { get; set; }
         public string Reason { get; set; }
         public string Status { get; set; }
@@ -17,6 +18,7 @@ namespace Store.DataMigrator
         public int SchemaVersion { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        #pragma warning restore CS8618
     }
 
     public enum MigrationStatus
@@ -29,23 +31,18 @@ namespace Store.DataMigrator
 
     public class MigrationContext : DbContext
     {
-        #region Tables
-
         public DbSet<Migration> Migrations { get; set; }
 
         public const string MigrationsTableName = "__migrations";
 
-        #endregion
+        public MigrationContext() {
+            Migrations = Set<Migration>();
+        }
 
-        #region Constructors
-
-        public MigrationContext() { }
-
-        public MigrationContext(DbContextOptions<MigrationContext> options) : base(options) { }
-
-        #endregion
-
-        #region Protected methods
+        public MigrationContext(DbContextOptions<MigrationContext> options) : base(options)
+        {
+            Migrations = Set<Migration>();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,11 +52,7 @@ namespace Store.DataMigrator
 
         }
 
-        #endregion
-
-        #region Operations
-
-        public Migration GetNewMigration(string reason, int schemaVersion, int nscripts, string version)
+        public static Migration GetNewMigration(string reason, int schemaVersion, int nscripts, string version)
         {
             return new Migration()
             {
@@ -93,15 +86,12 @@ namespace Store.DataMigrator
                 databaseCreator?.CreateTables();
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //A Sql exception will be thrown if tables already exist. So simply ignore it.
-                var message = e.Message;
+                //var message = e.Message;
             }
 
         }
-
-        #endregion
-
     }
 }

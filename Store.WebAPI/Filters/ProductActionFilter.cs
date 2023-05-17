@@ -5,11 +5,9 @@ namespace Store.WebAPI.Filters
     // Фильтр действий для скрытия товаров с нулевым количеством и проверки наличия товара
     public class ProductActionFilter : IActionFilter
     {
-        private readonly IStoreDbContext _ctx;
-
-        public ProductActionFilter(IStoreDbContext ctx)
+        public ProductActionFilter()
         {
-            _ctx = ctx;
+
         }
 
         public void OnActionExecuting(ActionExecutingContext context)

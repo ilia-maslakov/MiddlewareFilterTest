@@ -1,33 +1,44 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.DataContext.Entities;
 
-public class StoreDbContext : DbContext, IStoreDbContext
+namespace Store.DataContext.Context
 {
-    public StoreDbContext(DbContextOptions<StoreDbContext> options) :
-        base(options)
-    { }
-
-
-    public DbSet<Product> Products { get; set; }
-    public DbSet<User> Users { get; set; }
-
-    public async Task<int> SaveChangesAsync()
+    public class StoreDbContext : DbContext, IStoreDbContext
     {
-        return await base.SaveChangesAsync();
-    }
+        public StoreDbContext(DbContextOptions<StoreDbContext> options)
+            : base(options)
+        {
+            Products = Set<Product>();
+            Users = Set<User>();
+            
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+        }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql("Host=localhost;Database=storebase;Username=StoreDBAdmin;Password=Store123");
-    }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+        public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
 
-        // Addd the Postgres Extension for UUID generation
-        modelBuilder.HasPostgresExtension("uuid-ossp");
+        public async Task<int> SaveChangesAsync()
+        {
+            return await base.SaveChangesAsync();
+        }
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(StoreDbContext).Assembly);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql("Host=localhost;Database=storebase;Username=StoreDBAdmin;Password=Store123");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Addd the Postgres Extension for UUID generation
+            modelBuilder.HasPostgresExtension("uuid-ossp");
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(StoreDbContext).Assembly);
+        }
     }
 }

@@ -32,8 +32,9 @@ namespace Store.WebAPI.Middleware
             }
             else
             {
-                var requiredRoles = authorizeAttribute.Roles.Split(',');
-                if (!requiredRoles.Any(role => ((ClaimsIdentity)context.User.Identity).HasClaim(ClaimTypes.Role, role.Trim())))
+                var requiredRoles = authorizeAttribute.Roles?.Split(',') ?? Array.Empty<string>();
+
+                if (context.User?.Identity != null && !requiredRoles.Any(role => ((ClaimsIdentity)context.User.Identity).HasClaim(ClaimTypes.Role, role.Trim())))
                 {
                     // ≈сли у пользовател€ нет требуемой роли, то возвращаем ошибку 403 Forbidden и завершаем обработку запроса.
                     context.Response.StatusCode = 403;

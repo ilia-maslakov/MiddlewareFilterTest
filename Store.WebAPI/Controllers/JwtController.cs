@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Store.DataContext.Entities;
@@ -73,7 +72,8 @@ namespace Store.WebAPI.Controllers
                     Login = username,
                     Name = username,
                     Email = email,
-                    Hash = hashedPassword
+                    Hash = hashedPassword,
+                    Role = isAdmin ?? 0
                 };
                 _ctx.Users.Add(newuser);
                 _ctx.SaveChanges();
@@ -84,7 +84,7 @@ namespace Store.WebAPI.Controllers
             return BadRequest(new { errorText = "User already exists." });
         }
 
-        private ClaimsIdentity GetIdentity(string username, string password)
+        private ClaimsIdentity? GetIdentity(string username, string password)
         {
             var user = _ctx.Users.FirstOrDefault(u => u.Login == username);
             if (user == null)
@@ -92,7 +92,7 @@ namespace Store.WebAPI.Controllers
                 return null;
             }
 
-            var result = _passwordHasher.VerifyHashedPassword(new User(), user.Hash, password);
+            var result = _passwordHasher.VerifyHashedPassword(new User(), user.Hash ?? String.Empty, password);
 
             switch (result)
             {
@@ -120,6 +120,5 @@ namespace Store.WebAPI.Controllers
 
             return new ClaimsIdentity(claims.ToArray(), "Token");
         }
-
     }
 }

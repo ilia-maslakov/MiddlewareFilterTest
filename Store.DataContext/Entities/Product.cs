@@ -7,7 +7,7 @@
         public Guid Id { get; set; }
 
         /// <summary>Наименование товара</summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>Описание товара</summary>
         public string? Description { get; set; }

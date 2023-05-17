@@ -12,7 +12,26 @@ namespace Store.DataMigrator
 
         static TCTX CreateDbContext<TCTX>(Func<DbContextOptionsBuilder, DbContextOptions> dbOptionConf) where TCTX : DbContext
         {
-            return (TCTX)Activator.CreateInstance(typeof(TCTX), dbOptionConf(new DbContextOptionsBuilder<TCTX>()));
+            var optionsBuilder = new DbContextOptionsBuilder<TCTX>();
+            var options = dbOptionConf(optionsBuilder);
+
+            if (options == null)
+            {
+                throw new InvalidOperationException("Failed to create DbContextOptions.");
+            }
+            else
+            {
+                var type = typeof(TCTX);
+                var instance = Activator.CreateInstance(type, options);
+                if (instance is TCTX res)
+                {
+                    return res;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Failed to create DbContextOptions.");
+                }
+            }
         }
     }
 }
