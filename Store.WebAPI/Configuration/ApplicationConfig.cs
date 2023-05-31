@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Store.DataContext.Context;
+using Store.DataContext.Entities;
 using Store.WebAPI.Filters;
+using Store.WebAPI.Services;
 
 namespace Store.WebAPI.Configuration
 {
@@ -18,6 +21,10 @@ namespace Store.WebAPI.Configuration
             services.AddScoped<ProductActionFilter>();
             services.AddScoped<ProductGetAllActionFilter>();
             services.AddScoped<ProductInfoActionFilter>();
+
+            // сервисы
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<IIdentityService, IdentityService>();
 
             return services;
         }

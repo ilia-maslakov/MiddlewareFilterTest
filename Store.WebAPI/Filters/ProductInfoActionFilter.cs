@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Store.DataContext.Context;
 using Store.DataContext.Entities;
 
 namespace Store.WebAPI.Filters

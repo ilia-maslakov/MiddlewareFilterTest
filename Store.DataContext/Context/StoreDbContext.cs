@@ -21,6 +21,11 @@ namespace Store.DataContext.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
 
+        public User? GetUserByUsername(string username)
+        {
+            return Users.FirstOrDefault(u => u.Login == username);
+        }
+
         public async Task<int> SaveChangesAsync()
         {
             return await base.SaveChangesAsync();

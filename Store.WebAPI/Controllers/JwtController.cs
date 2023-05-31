@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Store.DataContext.Context;
 using Store.DataContext.Entities;
 using Store.WebAPI.Configuration;
+using Store.WebAPI.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -16,12 +18,14 @@ namespace Store.WebAPI.Controllers
         private readonly AuthServerOptions _authServerOptions;
         private readonly IStoreDbContext _ctx;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IIdentityService _identityService;
 
-        public AccountController(IStoreDbContext ctx, IOptions<AuthServerOptions> authServerOptions)
+        public AccountController(IStoreDbContext ctx, IOptions<AuthServerOptions> authServerOptions, IIdentityService identityService)
         {
             _authServerOptions = authServerOptions.Value;
             _passwordHasher = new PasswordHasher<User>();
             _ctx = ctx;
+            _identityService = identityService;
 
         }
 
@@ -29,7 +33,7 @@ namespace Store.WebAPI.Controllers
         public IActionResult Token(string username, string password)
         {
 
-            var identity = GetIdentity(username, password);
+            var identity = _identityService.GetIdentity(username, password);
             if (identity == null)
             {
                 return BadRequest(new { errorText = "Invalid username or password." });
@@ -64,7 +68,7 @@ namespace Store.WebAPI.Controllers
         {
             var hashedPassword = _passwordHasher.HashPassword(new User(), password);
 
-            var identity = GetIdentity(username, password);
+            var identity = _identityService.GetIdentity(username, password);
             if (identity == null)
             {
                 var newuser = new User()
@@ -82,43 +86,6 @@ namespace Store.WebAPI.Controllers
             }
 
             return BadRequest(new { errorText = "User already exists." });
-        }
-
-        private ClaimsIdentity? GetIdentity(string username, string password)
-        {
-            var user = _ctx.Users.FirstOrDefault(u => u.Login == username);
-            if (user == null)
-            {
-                return null;
-            }
-
-            var result = _passwordHasher.VerifyHashedPassword(new User(), user.Hash ?? String.Empty, password);
-
-            switch (result)
-            {
-                case PasswordVerificationResult.Success:
-                    break;
-                case PasswordVerificationResult.SuccessRehashNeeded:
-                    // Если пароль был хеширован с более слабым алгоритмом, чем сейчас используется,
-                    // то перехешируем его и обновим запись в БД.
-                    user.Hash = _passwordHasher.HashPassword(new User(), password);
-                    _ctx.SaveChanges();
-                    break;
-                default:
-                    return null;
-            }
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Login),
-                new Claim(ClaimTypes.Role, "USER")
-            };
-            if (user.Role == 1)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, "ADMIN"));
-            }
-
-            return new ClaimsIdentity(claims.ToArray(), "Token");
         }
     }
 }
