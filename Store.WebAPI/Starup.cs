@@ -15,7 +15,7 @@ namespace Store.WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Добавьте вызов метода AddLoggerServices для настройки Serilog
+            // Р”РѕР±Р°РІСЊС‚Рµ РІС‹Р·РѕРІ РјРµС‚РѕРґР° AddLoggerServices РґР»СЏ РЅР°СЃС‚СЂРѕР№РєРё Serilog
             services.AddLoggerServices(Configuration);
 
             services.AddLoggerServices(Configuration);
@@ -35,7 +35,7 @@ namespace Store.WebAPI
 
         public void Configure(IApplicationBuilder app)
         {
-            // Добавление Serilog middleware для логирования запросов
+            // Р”РѕР±Р°РІР»РµРЅРёРµ Serilog middleware РґР»СЏ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃРѕРІ
             app.UseSerilogRequestLogging();
             app.UseRouting();
 

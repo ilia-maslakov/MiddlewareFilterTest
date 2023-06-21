@@ -4,7 +4,7 @@ using Store.DataContext.Entities;
 
 namespace Store.WebAPI.Filters
 {
-    // Фильтр действий для скрытия товаров с нулевым количеством и проверки наличия товара
+    // Р¤РёР»СЊС‚СЂ РґРµР№СЃС‚РІРёР№ РґР»СЏ СЃРєСЂС‹С‚РёСЏ С‚РѕРІР°СЂРѕРІ СЃ РЅСѓР»РµРІС‹Рј РєРѕР»РёС‡РµСЃС‚РІРѕРј Рё РїСЂРѕРІРµСЂРєРё РЅР°Р»РёС‡РёСЏ С‚РѕРІР°СЂР°
     public class ProductGetAllActionFilter : IActionFilter
     {
         public ProductGetAllActionFilter()
@@ -14,12 +14,12 @@ namespace Store.WebAPI.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            // Ничего не делаем при входе в действие
+            // РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј РїСЂРё РІС…РѕРґРµ РІ РґРµР№СЃС‚РІРёРµ
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            // Проверяем, является ли текущий пользователь анонимным пользователем
+            // РџСЂРѕРІРµСЂСЏРµРј, СЏРІР»СЏРµС‚СЃСЏ Р»Рё С‚РµРєСѓС‰РёР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ Р°РЅРѕРЅРёРјРЅС‹Рј РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј
             if (context.HttpContext.User?.Identity?.IsAuthenticated == false)
             {
                 if (context.Result is ObjectResult objectResult && objectResult.Value is List<Product> products)

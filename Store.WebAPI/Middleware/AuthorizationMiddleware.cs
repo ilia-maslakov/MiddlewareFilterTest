@@ -16,14 +16,14 @@ namespace Store.WebAPI.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            // Если пользователь не авторизован и запрашивает ресурс /token, то разрешаем доступ без проверки прав.
+            // Р•СЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ Рё Р·Р°РїСЂР°С€РёРІР°РµС‚ СЂРµСЃСѓСЂСЃ /token, С‚Рѕ СЂР°Р·СЂРµС€Р°РµРј РґРѕСЃС‚СѓРї Р±РµР· РїСЂРѕРІРµСЂРєРё РїСЂР°РІ.
             if (context.Request.Path == "/token")
             {
                 await _next(context);
                 return;
             }
 
-            // Проверяем, является ли атрибут [Authorize(Roles = "admin")] заданным для данного действия
+            // РџСЂРѕРІРµСЂСЏРµРј, СЏРІР»СЏРµС‚СЃСЏ Р»Рё Р°С‚СЂРёР±СѓС‚ [Authorize(Roles = "admin")] Р·Р°РґР°РЅРЅС‹Рј РґР»СЏ РґР°РЅРЅРѕРіРѕ РґРµР№СЃС‚РІРёСЏ
             var authorizeAttribute = context.GetEndpoint()?.Metadata.GetMetadata<AuthorizeAttribute>();
             if (authorizeAttribute == null)
             {
@@ -36,7 +36,7 @@ namespace Store.WebAPI.Middleware
 
                 if (context.User?.Identity != null && !requiredRoles.Any(role => ((ClaimsIdentity)context.User.Identity).HasClaim(ClaimTypes.Role, role.Trim())))
                 {
-                    // Если у пользователя нет требуемой роли, то возвращаем ошибку 403 Forbidden и завершаем обработку запроса.
+                    // Р•СЃР»Рё Сѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅРµС‚ С‚СЂРµР±СѓРµРјРѕР№ СЂРѕР»Рё, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј РѕС€РёР±РєСѓ 403 Forbidden Рё Р·Р°РІРµСЂС€Р°РµРј РѕР±СЂР°Р±РѕС‚РєСѓ Р·Р°РїСЂРѕСЃР°.
                     context.Response.StatusCode = 403;
                     return;
                 }

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Store.WebAPI.Filters
 {
-    // Фильтр действий для скрытия товаров с нулевым количеством и проверки наличия товара
+    // Р¤РёР»СЊС‚СЂ РґРµР№СЃС‚РІРёР№ РґР»СЏ СЃРєСЂС‹С‚РёСЏ С‚РѕРІР°СЂРѕРІ СЃ РЅСѓР»РµРІС‹Рј РєРѕР»РёС‡РµСЃС‚РІРѕРј Рё РїСЂРѕРІРµСЂРєРё РЅР°Р»РёС‡РёСЏ С‚РѕРІР°СЂР°
     public class ProductActionFilter : IActionFilter
     {
         public ProductActionFilter()
@@ -12,7 +12,7 @@ namespace Store.WebAPI.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            // Ничего не делаем при входе в действие
+            // РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј РїСЂРё РІС…РѕРґРµ РІ РґРµР№СЃС‚РІРёРµ
         }
 
         public void OnActionExecuted(ActionExecutedContext context)

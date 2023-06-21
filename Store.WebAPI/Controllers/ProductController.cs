@@ -25,28 +25,28 @@ namespace Store.WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] Product product)
         {
-            // Проверяем, что переданный идентификатор совпадает с идентификатором товара в теле запроса
+            // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РїРµСЂРµРґР°РЅРЅС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРѕРІРїР°РґР°РµС‚ СЃ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРј С‚РѕРІР°СЂР° РІ С‚РµР»Рµ Р·Р°РїСЂРѕСЃР°
             if (id != product.Id)
             {
                 return BadRequest();
             }
 
-            // Получаем товар из базы данных
+            // РџРѕР»СѓС‡Р°РµРј С‚РѕРІР°СЂ РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С…
             var existingProduct = await _ctx.Products.FindAsync(id);
 
-            // Если товар не найден, возвращаем ошибку 404
+            // Р•СЃР»Рё С‚РѕРІР°СЂ РЅРµ РЅР°Р№РґРµРЅ, РІРѕР·РІСЂР°С‰Р°РµРј РѕС€РёР±РєСѓ 404
             if (existingProduct == null)
             {
                 return NotFound();
             }
 
-            // Обновляем свойства товара
+            // РћР±РЅРѕРІР»СЏРµРј СЃРІРѕР№СЃС‚РІР° С‚РѕРІР°СЂР°
             existingProduct.Name = product.Name;
             existingProduct.Description = product.Description;
             existingProduct.Price = product.Price;
             existingProduct.Count = product.Count;
 
-            // Сохраняем изменения в базе данных
+            // РЎРѕС…СЂР°РЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…
             await _ctx.SaveChangesAsync();
 
             return NoContent();
@@ -57,10 +57,10 @@ namespace Store.WebAPI.Controllers
         public async Task<IActionResult> Add([FromBody] Product product)
         {
 
-            // Обновляем свойства товара
+            // РћР±РЅРѕРІР»СЏРµРј СЃРІРѕР№СЃС‚РІР° С‚РѕРІР°СЂР°
             _ctx.Products.Add(product);
 
-            // Сохраняем изменения в базе данных
+            // РЎРѕС…СЂР°РЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…
             await _ctx.SaveChangesAsync();
 
             return Ok(product);
@@ -78,7 +78,7 @@ namespace Store.WebAPI.Controllers
         [TypeFilter(typeof(ProductInfoActionFilter))]
         public IActionResult Info(Guid id)
         {
-            // Получаем товар из базы данных
+            // РџРѕР»СѓС‡Р°РµРј С‚РѕРІР°СЂ РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С…
             var product = _ctx.Products.Find(id);
             if (product != null)
             {
